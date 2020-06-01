@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.edu.scujcc.model.Channel;
+import cn.edu.scujcc.model.Comment;
 import cn.edu.scujcc.service.ChannelService;
 
 /**
@@ -105,8 +106,31 @@ public class ChannelController {
 	public List<Channel> searchByQuality(@PathVariable String quality){
 		return service.searchByQuality(quality);
 	}
+	
 	@GetMapping("/hot")
 	public List<Channel> getHotChannels(){
 		return service.getLatestCommentsChannel();
+	}
+	/**
+	 * 新增品论
+	 * @param channelId  评论编号
+	 * @param comment	评论对象
+	 */
+	@PostMapping("/{channelId}/comment")
+	public Channel addComment(@PathVariable String channelId ,@RequestBody Comment comment) {
+		Logger.debug("将为频道"+channelId+"新增一条评论："+comment);
+		//TODO 把评论保存到数据库
+		return service.addComment(channelId, comment);
+	}
+	/**
+	 * 获取指定频道的热门评论（前三条）
+	 * @param channelId  指定频道的编号
+	 * @return			3条热门频道的列表（数组）
+	 */
+	@GetMapping("/{channelId}/hotcomments")
+	public List<Comment> hotComments(@PathVariable String channelId){
+		Logger.debug("将获取频道"+channelId+"的热门的评论...");
+		//TODO 从数据库中获取热门频道
+		return service.hotcomments(channelId);
 	}
 }

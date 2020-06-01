@@ -1,5 +1,6 @@
 package cn.edu.scujcc.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -18,14 +19,16 @@ public class Channel {
 	private String quality;
 	private String url;
 	private List<Comment>	comments;
+	private String cover;      //频道封面
 	
 	
-	public List<Comment> getComments() {
-		return comments;
+	public String getCover() {
+		return cover;
 	}
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
+	public void setCover(String cover) {
+		this.cover = cover;
 	}
+	
 	public String getId() {
 		return id;
 	}
@@ -50,10 +53,31 @@ public class Channel {
 	public void setUrl(String url) {
 		this.url = url;
 	}
+	public List<Comment> getComments() {
+		return comments;
+	}
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+	/**
+	 * 向当前频道增加一个评论对象
+	 * @param comment
+	 */
+	public void addComment(Comment comment) {
+		if(this.comments == null) {
+			//防止空指针
+			this.comments = new ArrayList<>();
+		}
+		this.comments.add(comment);
+	}
+	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((comments == null) ? 0 : comments.hashCode());
+		result = prime * result + ((cover == null) ? 0 : cover.hashCode());
 		result = prime * result + ((quality == null) ? 0 : quality.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		result = prime * result + ((url == null) ? 0 : url.hashCode());
@@ -68,6 +92,16 @@ public class Channel {
 		if (getClass() != obj.getClass())
 			return false;
 		Channel other = (Channel) obj;
+		if (comments == null) {
+			if (other.comments != null)
+				return false;
+		} else if (!comments.equals(other.comments))
+			return false;
+		if (cover == null) {
+			if (other.cover != null)
+				return false;
+		} else if (!cover.equals(other.cover))
+			return false;
 		if (quality == null) {
 			if (other.quality != null)
 				return false;
@@ -87,7 +121,8 @@ public class Channel {
 	}
 	@Override
 	public String toString() {
-		return "Channel [id=" + id + ", title=" + title + ", quality=" + quality + ", url=" + url + "]";
+		return "Channel [id=" + id + ", title=" + title + ", quality=" + quality + ", url=" + url + ", comments="
+				+ comments + ", cover=" + cover + "]";
 	}
 	
 	
